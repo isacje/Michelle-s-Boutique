@@ -669,11 +669,11 @@
 }
 
     .hero-logo {
-        width: auto;  /* Adjust size as needed */
-        height: auto;
-        display: block;
-        margin: 0 auto 1rem;  /* center horizontally and add bottom spacing */
-    }
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 1rem;
+}
     a .fas {
     color: #ffffff; /* your preferred icon color */
     text-decoration: none;
