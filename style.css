@@ -129,12 +129,13 @@
         }
 
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: var(--charcoal);
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.5s forwards;
+        font-size: clamp(2rem, 6vw, 4rem);
+        margin-bottom: 1rem;
+        color: var(--charcoal);
+        opacity: 0;
+        animation: fadeInUp 1s ease 0.5s forwards;
         }
+
 
         .hero-tagline {
             font-size: 1.5rem;
@@ -663,9 +664,10 @@
             }
         }
 
-        .monogram {
-    margin-bottom: 1rem;
-    }
+       .monogram {
+  margin-bottom: clamp(0.5rem, 2vw, 2rem);
+}
+
     .hero-logo {
         width: auto;  /* Adjust size as needed */
         height: auto;
