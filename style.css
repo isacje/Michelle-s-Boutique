@@ -682,3 +682,8 @@
     a:hover .fas {
     color: #ffffff; /* hover color */
     }
+#title {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
