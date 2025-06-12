@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Michelle's Boutique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            --cream: #f5f5dc;
+            --dark-cream: #e6d7a3;
+            --charcoal: #36454f;
+            --gold: #d4af37;
+            --dark-gold: #b8941f;
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --light-gray: #f8f8f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            background-color: var(--black);
+        }
+
+        /* Gallery-specific styles */
+        .gallery-hero {
+            min-height: 60vh;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--dark-cream) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .gallery-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .gallery-hero p {
+            font-size: 1.3rem;
+            color: var(--dark-gold);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb {
+            background: var(--black);
+            padding: 1rem 0;
+            margin-top: 80px;
+        }
+
+        .breadcrumb-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--dark-gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--gold);
+        }
+
+        .breadcrumb span {
+            color: var(--gold);
+            margin: 0 0.5rem;
+        }
+
+        .gallery-main {
+            background: var(--black);
+            padding: 4rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--dark-cream);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: var(--dark-gold);
+            border: 2px solid var(--dark-gold);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 3px solid var(--charcoal);
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .full-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item-full {
+            background: var(--light-gray);
+            aspect-ratio: 4/3;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid transparent;
+        }
+
+        .gallery-item-full:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+            border-color: var(--gold);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: var(--white);
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item-full:hover .gallery-item-overlay {
+            transform: translateY(0);
+        }
+
+        .back-to-main {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gold);
+            color: var(--charcoal);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-to-main:hover {
+            background: var(--dark-gold);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: var(--white);
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212, 175, 55, 0.8);
+            color: var(--white);
+            border: none;
+            font-size: 24px;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .modal-nav:hover {
+            background: var(--gold);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-nav.left {
+            left: 20px;
+        }
+
+        .modal-nav.right {
+            right: 20px;
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-align: center;
+            z-index: 1001;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--gold);
+        }
+
+        .serif {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--dark-gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .error-message {
+            text-align: center;
+            color: var(--dark-gold);
+            font-size: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .full-gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .modal-nav {
+                padding: 10px 15px;
+                font-size: 20px;
+            }
+
+            .modal-nav.left {
+                left: 10px;
+            }
+
+            .modal-nav.right {
+                right: 10px;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .gallery-controls {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .full-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo serif">Michelle's Boutique</a>
+            <ul class="nav-menu">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb Navigation -->
+    <section class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Gallery</span>
+        </div>
+    </section>
+
+    <!-- Gallery Hero Section -->
+    <section class="gallery-hero">
+        <div class="gallery-hero-content">
+            <h1 class="serif">Our Beautiful Creations</h1>
+            <p>Explore our portfolio of stunning events and memorable celebrations</p>
+        </div>
+    </section>
+
+    <!-- Main Gallery Section -->
+    <section class="gallery-main">
+        <div class="container">
+            <a href="index.html" class="back-to-main">← Back to Main Site</a>
+            
+            <h2 class="section-title serif">Captured Moments</h2>
+            <p class="section-subtitle">Every Event Tells a Story</p>
+
+            <!-- Gallery Filter Controls -->
+            <!-- <div class="gallery-controls">
+                <button class="filter-btn active" data-filter="all">All Events</button>
+                <button class="filter-btn" data-filter="wedding">Weddings</button>
+                <button class="filter-btn" data-filter="birthday">Birthdays</button>
+                <button class="filter-btn" data-filter="corporate">Corporate</button>
+                <button class="filter-btn" data-filter="baby">Baby Showers</button>
+                <button class="filter-btn" data-filter="other">Other Events</button>
+            </div> -->
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <span>Loading gallery...</span>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Unable to load gallery images. Please check your Cloudinary configuration.</p>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="full-gallery-grid" id="galleryGrid" style="display: none;">
+                <!-- Images will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <span class="modal-close" id="modalClose">&times;</span>
+        <button id="prevBtn" class="modal-nav left" aria-label="Previous Image">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <img class="modal-content" id="modalImage" alt="Gallery Image">
+        <button id="nextBtn" class="modal-nav right">&#10095;</button>
+        <div class="modal-info" id="modalInfo">
+            <span id="imageCounter">1 / 10</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html#home">Home</a>
+                <a href="index.html#about">About</a>
+                <a href="index.html#services">Services</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+            <p>&copy; 2025 Michelle's Boutique. All rights reserved. | Transforming Moments Into Memories</p>
+        </div>
+    </footer>
+
+    <script>
+// Gallery state
+let allImages = [];
+let filteredImages = [];
+let currentImageIndex = 0;
+let currentFilter = 'all';
+
+// DOM elements
+const loadingSpinner = document.getElementById('loadingSpinner');
+const errorMessage = document.getElementById('errorMessage');
+const galleryGrid = document.getElementById('galleryGrid');
+const modal = document.getElementById('imageModal');
+const modalImage = document.getElementById('modalImage');
+const modalClose = document.getElementById('modalClose');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const imageCounter = document.getElementById('imageCounter');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+// Initialize gallery on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeGallery();
+    setupEventListeners();
+});
+
+// Initialize gallery
+async function initializeGallery() {
+    try {
+        showLoading();
+        loadDemoImages();
+        renderGallery();
+        hideLoading();
+    } catch (error) {
+        console.error('Error initializing gallery:', error);
+        showError('Failed to load images.');
+    }
+}
+
+// Fallback demo images only
+function loadDemoImages() {
+    const demoImages = [
+        { id: 'wedding1', url: 'https://via.placeholder.com/800x600/d4af37/1a1a1a?text=Wedding+1', fullUrl: 'https://via.placeholder.com/1200x900/d4af37/1a1a1a?text=Wedding+1', title: 'Elegant Wedding Ceremony', category: 'wedding' },
+        { id: 'wedding2', url: 'https://via.placeholder.com/800x600/b8941f/f5f5dc?text=Wedding+2', fullUrl: 'https://via.placeholder.com/1200x900/b8941f/f5f5dc?text=Wedding+2', title: 'Beautiful Wedding Reception', category: 'wedding' },
+        { id: 'birthday1', url: 'https://via.placeholder.com/800x600/36454f/d4af37?text=Birthday+1', fullUrl: 'https://via.placeholder.com/1200x900/36454f/d4af37?text=Birthday+1', title: 'Festive Birthday Party', category: 'birthday' },
+        { id: 'birthday2', url: 'https://via.placeholder.com/800x600/1a1a1a/f5f5dc?text=Birthday+2', fullUrl: 'https://via.placeholder.com/1200x900/1a1a1a/f5f5dc?text=Birthday+2', title: 'Sweet Birthday Celebration', category: 'birthday' },
+        { id: 'corporate1', url: 'https://via.placeholder.com/800x600/f5f5dc/1a1a1a?text=Corporate+1', fullUrl: 'https://via.placeholder.com/1200x900/f5f5dc/1a1a1a?text=Corporate+1', title: 'Professional Corporate Event', category: 'corporate' },
+        { id: 'baby1', url: 'https://via.placeholder.com/800x600/e6d7a3/36454f?text=Baby+Shower', fullUrl: 'https://via.placeholder.com/1200x900/e6d7a3/36454f?text=Baby+Shower', title: 'Adorable Baby Shower', category: 'baby' }
+    ];
+
+    allImages = demoImages;
+    filteredImages = [...allImages];
+}
+
+// Render gallery without descriptions
+function renderGallery() {
+    galleryGrid.innerHTML = '';
+
+    filteredImages.forEach((image, index) => {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item-full';
+        galleryItem.style.backgroundImage = `url('${image.url}')`;
+        galleryItem.setAttribute('data-index', index);
+
+        // Description overlay removed
+
+        galleryItem.addEventListener('click', () => openModal(index));
+
+        galleryGrid.appendChild(galleryItem);
+    });
+}
+
+// Filter functionality
+function filterImages(category) {
+    currentFilter = category;
+
+    if (category === 'all') {
+        filteredImages = [...allImages];
+    } else {
+        filteredImages = allImages.filter(image => image.category === category);
+    }
+
+    renderGallery();
+
+    // Update active filter button
+    filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === category);
+    });
+}
+
+// Modal functionality
+function openModal(index) {
+    currentImageIndex = index;
+    modalImage.src = filteredImages[index].fullUrl;
+    updateImageCounter();
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % filteredImages.length;
+    modalImage.src = filteredImages[currentImageIndex].fullUrl;
+    updateImageCounter();
+}
+
+function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + filteredImages.length) % filteredImages.length;
+    modalImage.src = filteredImages[currentImageIndex].fullUrl;
+    updateImageCounter();
+}
+
+function updateImageCounter() {
+    imageCounter.textContent = `${currentImageIndex + 1} / ${filteredImages.length}`;
+}
+
+// Utility functions
+function showLoading() {
+    loadingSpinner.style.display = 'flex';
+    errorMessage.style.display = 'none';
+    galleryGrid.style.display = 'none';
+}
+
+function hideLoading() {
+    loadingSpinner.style.display = 'none';
+    galleryGrid.style.display = 'grid';
+}
+
+function showError(message) {
+    loadingSpinner.style.display = 'none';
+    errorMessage.style.display = 'block';
+    errorMessage.querySelector('p').textContent = message;
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Filter buttons
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterImages(btn.getAttribute('data-filter'));
+        });
+    });
+
+    // Modal controls
+    modalClose.addEventListener('click', closeModal);
+    nextBtn.addEventListener('click', nextImage);
+    prevBtn.addEventListener('click', prevImage);
+
+    // Modal background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('active')) return;
+
+        switch(e.key) {
+            case 'Escape':
+                closeModal();
+                break;
+            case 'ArrowRight':
+                nextImage();
+                break;
+            case 'ArrowLeft':
+                prevImage();
+                break;
+        }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+}
+
+
+    </script>
+</body>
+</html>

@@ -129,31 +129,36 @@
 
     <!-- Gallery Section -->
     <section id="gallery" class="section gallery">
-        <div class="container">
-            <h2 class="section-title serif">Our Work</h2>
-            <p class="section-subtitle">A Glimpse Into Our Beautiful Creations</p>
-            <div class="gallery-grid">
+    <div class="container">
+        <h2 class="section-title serif">Our Work</h2>
+        <p class="section-subtitle">A Preview of Our Beautiful Creations</p>
+        <div class="gallery-grid">
             <div class="gallery-item" data-image="images/1.jpg"></div>
             <div class="gallery-item" data-image="images/2.jpg"></div>
             <div class="gallery-item" data-image="images/3.jpg"></div>
             <div class="gallery-item" data-image="images/4.jpg"></div>
             <div class="gallery-item" data-image="images/5.jpg"></div>
             <div class="gallery-item" data-image="images/6.jpg"></div>
-            <div class="gallery-item" data-image="images/7.jpg"></div>
-            <div class="gallery-item" data-image="images/8.jpg"></div>
-            <div class="gallery-item" data-image="images/9.jpg"></div>
-            </div>
-        <div id="imageModal" class="modal">
-        <span id="modalClose" class="modal-close">&times;</span>
-        <button id="prevBtn" class="modal-nav left" aria-label="Previous Image">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" >
-        <polyline points="15 18 9 12 15 6"></polyline>
-    </svg>
-    </button>
-        <img id="modalImage" class="modal-content" src="" alt="Enlarged image" />
-        <button id="nextBtn" class="modal-nav right">&#10095;</button>
         </div>
-    </section>
+        
+        <!-- View More Button -->
+        <div class="gallery-button-container">
+            <a href="gallery.html" class="gallery-btn">View More</a>
+            <p class="gallery-note">See all our beautiful creations</p>
+        </div>
+        
+        <div id="imageModal" class="modal">
+            <span id="modalClose" class="modal-close">&times;</span>
+            <button id="prevBtn" class="modal-nav left" aria-label="Previous Image">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <img id="modalImage" class="modal-content" src="" alt="Enlarged image" />
+            <button id="nextBtn" class="modal-nav right">&#10095;</button>
+        </div>
+    </div>
+</section>
 
     <!-- Contact Section -->
     <section id="contact" class="section contact">
