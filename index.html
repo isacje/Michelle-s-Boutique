@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michelle's Boutique - Transforming Moments Into Memories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link  rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo serif">Michelle's Boutique</a>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <img src="M.png" alt="Michelle's Boutique Logo" class="hero-logo" />
+        <h1 id="title" class="serif">Michelle's Boutique</h1>
+        <p class="hero-tagline">Transforming Moments Into Memories</p>
+        <a href="#services" class="cta-button">Explore Our Services</a>
+    </div>
+</section>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <span class="modal-close" id="modalClose">&times;</span>
+        <img class="modal-content" id="modalImage" alt="Gallery Image">
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title serif">About Michelle's Boutique</h2>
+            <p class="section-subtitle">Creating Extraordinary Experiences Since 2020</p>
+            <div class="about-content">
+                <p>At Michelle's Boutique, we believe every celebration deserves to be extraordinary. With meticulous attention to detail and a passion for creating unforgettable moments, we specialize in transforming your vision into breathtaking reality.</p>
+                <br>
+                <p>From intimate gatherings to grand celebrations, our team of creative professionals brings years of experience and an eye for elegance to every event. We don't just plan events – we craft experiences that leave lasting impressions and create cherished memories for you and your guests.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section services">
+  <div class="container">
+    <h2 class="section-title serif">Our Services</h2>
+    <p class="section-subtitle">Customized Event Planning & Decoration Services</p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-heart"></i></div>
+        <h3 class="serif">Weddings & Receptions</h3>
+        <div class="service-details">
+          <p>We help bring your dream wedding to life—whether it's an elegant reception or a cozy ceremony, our expert planning ensures every detail is perfect.</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-ring"></i></div>
+        <h3 class="serif">Bridal Showers</h3>
+        <div class="service-details">
+          <p>Celebrate the bride-to-be with charming themes, personalized decor, and a stress-free planning experience tailored to her style.</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-cocktail"></i></div>
+        <h3 class="serif">Adult Birthdays</h3>
+        <div class="service-details">
+          <p>Whether it's a milestone birthday or a simple gathering, we create stylish and unforgettable party setups for adults of any age.</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-birthday-cake"></i></div>
+        <h3 class="serif">Kids Birthdays</h3>
+        <div class="service-details">
+          <p>From superheroes to princesses, we craft magical experiences for your child's special day with themed decorations and fun activities.</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-cross"></i></div>
+        <h3 class="serif">Holy Communion</h3>
+        <div class="service-details">
+          <p>Elegant and respectful decoration services for Holy Communion ceremonies, combining grace and celebration seamlessly.</p>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><i class="fas fa-user-tie"></i></div>
+        <h3 class="serif">Retirement Parties</h3>
+        <div class="service-details">
+          <p>Honor a lifetime of work with meaningful, heartfelt events designed to reflect achievements and legacy.</p>
+        </div>
+      </div>
+
+      <div class="service-card full-width">
+        <div class="service-icon"><i class="fas fa-star"></i></div>
+        <h3 class="serif">Custom Events</h3>
+        <div class="service-details">
+          <p>Got something special in mind? Whether it's an engagement, cultural event, or something entirely unique — we’re here to bring it to life exactly as you imagine.</p>
+          <a href="#contact" class="contact-button">Contact Us</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery">
+    <div class="container">
+        <h2 class="section-title serif">Our Work</h2>
+        <p class="section-subtitle">A Preview of Our Beautiful Creations</p>
+        <div class="gallery-grid">
+            <div class="gallery-item" data-image="images/1.jpg"></div>
+            <div class="gallery-item" data-image="images/2.jpg"></div>
+            <div class="gallery-item" data-image="images/3.jpg"></div>
+            <div class="gallery-item" data-image="images/4.jpg"></div>
+            <div class="gallery-item" data-image="images/5.jpg"></div>
+            <div class="gallery-item" data-image="images/6.jpg"></div>
+        </div>
+        
+        <!-- View More Button -->
+        <div class="gallery-button-container">
+            <a href="gallery.html" class="gallery-btn">View More</a>
+            <p class="gallery-note">See all our beautiful creations</p>
+        </div>
+        
+        <div id="imageModal" class="modal">
+            <span id="modalClose" class="modal-close">&times;</span>
+            <button id="prevBtn" class="modal-nav left" aria-label="Previous Image">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <img id="modalImage" class="modal-content" src="" alt="Enlarged image" />
+            <button id="nextBtn" class="modal-nav right">&#10095;</button>
+        </div>
+    </div>
+</section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <h2 class="section-title serif">Get In Touch</h2>
+            <p class="section-subtitle">Let's Plan Your Perfect Event Together</p>
+            <div class="contact-container">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">Select Event Type</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Bridal-Shower">Bridal Shower</option>
+                            <option value="Baby-Shower">Baby Shower</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Gathering">Gathering</option>
+                            <option value="Corporate">Corporate Event</option>
+                            <option value="Rental">Decor Rental</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Tell Us About Your Event</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Share your vision, date, guest count, and any special requirements..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+                    <div class="loading" id="loading" style="display: none; text-align: center; margin-top: 10px;">Sending your message...</div>
+                </form>
+
+                <!-- Success/Error Messages -->
+                <div class="success-message" id="successMessage" style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 4px; margin-top: 20px; display: none;">
+                    <strong>Thank you!</strong> Your event inquiry has been submitted successfully. 
+                    <span id="tokenDisplay"></span>
+                    Check your email for confirmation.
+                </div>
+
+                <div class="error-message" id="errorMessage" style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-top: 20px; display: none;">
+                    <strong>Error:</strong> <span id="errorText"></span>
+                </div>
+                <div class="contact-info">
+                    <h3 class="serif">Contact Information</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <strong>Phone</strong><br>
+                            (910)-583-7138
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><a href="mailto:alex_nardy@yahoo.com"><i class="fas fa-envelope"></i></a></div>
+                        <div>
+                            <strong>Email</strong><br>
+                            alex_nardy@yahoo.com
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <strong>Location</strong><br>
+                            Raeford, North Carolina
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <strong>Business Hours</strong><br>
+                            Mon-Fri: 9AM-6PM<br>
+                            Weekends: By Appointment
+                        </div>
+                    </div>
+                    <div class="social-links">
+  <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+  <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+  <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+  <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+                <a href="admin.html">Upload Images to Gallery</a>
+            </div>
+            <p>&copy; 2025 Michelle's Boutique. All rights reserved. | Transforming Moments Into Memories</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
