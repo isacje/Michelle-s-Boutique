@@ -545,6 +545,32 @@
         const fileDisplay = document.getElementById('fileDisplay');
         const uploadBtn = document.getElementById('uploadBtn');
 
+        // HEIC conversion function
+        async function convertHeicToJpeg(file) {
+            return new Promise((resolve, reject) => {
+                // Check if HEIC2ANY library is available
+                if (typeof heic2any === 'undefined') {
+                    reject(new Error('HEIC conversion library not available'));
+                    return;
+                }
+
+                heic2any({
+                    blob: file,
+                    toType: "image/jpeg",
+                    quality: 0.9
+                }).then((convertedBlob) => {
+                    // Create a new File object with the converted blob
+                    const convertedFile = new File([convertedBlob], 
+                        file.name.replace(/\.heic$/i, '.jpg'), 
+                        { type: 'image/jpeg' });
+                    resolve(convertedFile);
+                }).catch((error) => {
+                    console.error('HEIC conversion failed:', error);
+                    reject(error);
+                });
+            });
+        }
+
         // Check if user is already logged in
         if (sessionStorage.getItem('adminLoggedIn') === 'true') {
             showDashboard();
@@ -575,12 +601,21 @@
             if (files.length > 0) {
                 let validFiles = [];
                 let invalidFiles = [];
+                let heicFiles = [];
                 
                 // Validate each file
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     
-                    // Validate file type
+                    // Check if it's a HEIC file
+                    if (file.type === 'image/heic' || file.type === 'image/heif' || 
+                        file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+                        heicFiles.push(file);
+                        validFiles.push(file); // Include HEIC files as valid
+                        continue;
+                    }
+                    
+                    // Validate file type for other images
                     if (!file.type.startsWith('image/')) {
                         invalidFiles.push(`${file.name} (not an image)`);
                         continue;
@@ -603,9 +638,14 @@
                     const totalSize = validFiles.reduce((sum, file) => sum + file.size, 0);
                     const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
                     
+                    let displayText = `Selected: ${validFiles.length} image${validFiles.length > 1 ? 's' : ''}`;
+                    if (heicFiles.length > 0) {
+                        displayText += ` (${heicFiles.length} HEIC file${heicFiles.length > 1 ? 's' : ''} will be converted)`;
+                    }
+                    
                     fileDisplay.innerHTML = `
                         <i class="fas fa-check-circle file-icon" style="color: var(--gold);"></i>
-                        <div>Selected: ${validFiles.length} image${validFiles.length > 1 ? 's' : ''}</div>
+                        <div>${displayText}</div>
                         <small style="opacity: 0.7; margin-top: 0.5rem; display: block;">Ready to upload (${totalSizeMB} MB total)</small>
                         <div style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.6;">
                             ${validFiles.map(file => file.name).slice(0, 3).join(', ')}${validFiles.length > 3 ? ` and ${validFiles.length - 3} more...` : ''}
@@ -640,13 +680,23 @@
                 return;
             }
             
-            // Filter valid files
+            // Filter valid files and separate HEIC files
             const validFiles = [];
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/heic'];
+            const heicFiles = [];
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
             const maxSize = 10 * 1024 * 1024; // 10MB in bytes
             
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
+                
+                // Check if it's a HEIC file
+                if (file.type === 'image/heic' || file.type === 'image/heif' || 
+                    file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+                    if (file.size <= maxSize) {
+                        heicFiles.push(file);
+                    }
+                    continue;
+                }
                 
                 if (!allowedTypes.includes(file.type)) {
                     continue;
@@ -659,15 +709,48 @@
                 validFiles.push(file);
             }
             
-            if (validFiles.length === 0) {
+            if (validFiles.length === 0 && heicFiles.length === 0) {
                 showMessage(uploadStatus, 'No valid images selected. Please select valid image files under 10MB', 'error');
                 return;
             }
             
             // Disable button during upload
             uploadBtn.disabled = true;
-            uploadBtn.innerHTML = 'Uploading...';
+            uploadBtn.innerHTML = 'Processing...';
             
+            // Convert HEIC files first if any
+            if (heicFiles.length > 0) {
+                showMessage(uploadStatus, `Converting ${heicFiles.length} HEIC file${heicFiles.length > 1 ? 's' : ''}...`, 'loading');
+                
+                for (let i = 0; i < heicFiles.length; i++) {
+                    const heicFile = heicFiles[i];
+                    try {
+                        showMessage(uploadStatus, `Converting HEIC file ${i + 1}/${heicFiles.length}: ${heicFile.name}...`, 'loading');
+                        const convertedFile = await convertHeicToJpeg(heicFile);
+                        validFiles.push(convertedFile);
+                        console.log(`Successfully converted HEIC file: ${heicFile.name}`);
+                    } catch (error) {
+                        console.error(`Failed to convert HEIC file ${heicFile.name}:`, error);
+                        showMessage(uploadStatus, `Failed to convert HEIC file: ${heicFile.name}. ${error.message}`, 'error');
+                        
+                        // Continue with other files even if one HEIC conversion fails
+                        setTimeout(() => {
+                            if (validFiles.length > 0) {
+                                showMessage(uploadStatus, 'Continuing with remaining files...', 'loading');
+                            }
+                        }, 2000);
+                    }
+                }
+            }
+            
+            if (validFiles.length === 0) {
+                showMessage(uploadStatus, 'No files to upload after processing', 'error');
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = 'Upload to Gallery';
+                return;
+            }
+            
+            uploadBtn.innerHTML = 'Uploading...';
             showMessage(uploadStatus, `Uploading ${validFiles.length} beautiful moment${validFiles.length > 1 ? 's' : ''}...`, 'loading');
             
             let uploadedCount = 0;
@@ -801,7 +884,7 @@
             fileDisplay.innerHTML = `
                 <i class="fas fa-cloud-upload-alt file-icon"></i>
                 <div>Click to select images or drag and drop</div>
-                <small style="opacity: 0.7; margin-top: 0.5rem; display: block;">Supported formats: JPG, PNG, GIF, WebP</small>
+                <small style="opacity: 0.7; margin-top: 0.5rem; display: block;">Supported formats: JPG, PNG, GIF, WebP, HEIC</small>
                 <small style="opacity: 0.5; margin-top: 0.25rem; display: block;">You can select multiple images at once</small>
             `;
             fileDisplay.classList.remove('has-file');
@@ -858,8 +941,12 @@
             const files = dt.files;
             
             if (files.length > 0) {
-                // Filter for image files
-                const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+                // Filter for image files (including HEIC)
+                const imageFiles = Array.from(files).filter(file => 
+                    file.type.startsWith('image/') || 
+                    file.name.toLowerCase().endsWith('.heic') || 
+                    file.name.toLowerCase().endsWith('.heif')
+                );
                 
                 if (imageFiles.length > 0) {
                     // Create a new FileList-like object with only image files
