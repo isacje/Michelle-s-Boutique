@@ -1,0 +1,1146 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Images - Michelle's Boutique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <style>
+        :root {
+            --cream: #f5f5dc;
+            --dark-cream: #e6d7a3;
+            --charcoal: #36454f;
+            --gold: #d4af37;
+            --dark-gold: #b8941f;
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --light-gray: #f8f8f8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--black) 0%, var(--charcoal) 100%);
+            min-height: 100vh;
+            color: var(--white);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--dark-cream);
+            font-size: 1.2rem;
+        }
+
+        .upload-form {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--charcoal);
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .form-control option {
+            background: var(--charcoal);
+            color: var(--white);
+        }
+
+        .drag-drop-area {
+            border: 3px dashed var(--charcoal);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .drag-drop-area:hover,
+        .drag-drop-area.drag-over {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .drag-drop-area.uploading {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .drag-drop-content {
+            pointer-events: none;
+        }
+
+        .drag-drop-icon {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .drag-drop-text {
+            font-size: 1.3rem;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+
+        .drag-drop-subtext {
+            color: var(--dark-cream);
+            font-size: 1rem;
+        }
+
+        .upload-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+            color: var(--charcoal);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cream);
+            border: 2px solid var(--charcoal);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--gold);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-preview-area {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .file-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .file-preview-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .file-preview-item:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .file-preview-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-preview-item .file-name {
+            font-size: 0.8rem;
+            color: var(--cream);
+            word-break: break-all;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-preview-item .file-size {
+            font-size: 0.7rem;
+            color: var(--dark-cream);
+        }
+
+        .file-preview-item .remove-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-progress {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--success));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--cream);
+        }
+
+        .upload-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .upload-status.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .upload-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .upload-status.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .upload-summary {
+            background: rgba(54, 69, 79, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .upload-summary h4 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--cream);
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--dark-gold);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        .conversion-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(245, 158, 11, 0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .conversion-loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warning), var(--gold));
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .conversion-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(245, 158, 11, 0.95);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1001;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-options {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="gallery.html" class="back-link">← Back to Gallery</a>
+        
+        <div class="header">
+            <h1>Upload Images</h1>
+            <p>Add beautiful moments to your gallery with automatic organization</p>
+        </div>
+
+        <form class="upload-form" id="uploadForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="categorySelect">Event Category *</label>
+                    <select id="categorySelect" class="form-control" required>
+                        <option value="">Choose a category...</option>
+                        <option value="weddings">Weddings</option>
+                        <option value="birthday-parties">Birthday Parties</option>
+                        <option value="corporate-events">Corporate Events</option>
+                        <option value="baby-showers">Baby Showers</option>
+                        <option value="anniversaries">Anniversaries</option>
+                        <option value="graduation-parties">Graduation Parties</option>
+                        <option value="holiday-parties">Holiday Parties</option>
+                        <option value="bridal-showers">Bridal Showers</option>
+                        <option value="engagement-parties">Engagement Parties</option>
+                        <option value="event">Custom Events</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventTitle">Event Title (Optional)</label>
+                    <input type="text" id="eventTitle" class="form-control" placeholder="e.g., Sarah & John's Wedding">
+                </div>
+            </div>
+
+            <!-- <div class="form-group">
+                <label for="eventDescription">Event Description (Optional)</label>
+                <textarea id="eventDescription" class="form-control" rows="3" placeholder="Brief description of the event..."></textarea>
+            </div> -->
+
+            <div class="drag-drop-area" id="dragDropArea">
+                <div class="drag-drop-content">
+                    <span class="drag-drop-icon">📸</span>
+                    <div class="drag-drop-text">Drag & Drop Images Here</div>
+                    <div class="drag-drop-subtext">or click to browse files</div>
+                </div>
+            </div>
+
+            <input type="file" id="fileInput" class="file-input" multiple accept="image/*,.heic,.heif">
+
+            <div class="upload-options">
+                <button type="button" id="browseBtn" class="btn btn-secondary">
+                    📁 Browse Files
+                </button>
+                <button type="button" id="uploadBtn" class="btn btn-primary" disabled>
+                    🚀 Upload Images
+                </button>
+                <button type="button" id="clearBtn" class="btn btn-secondary" style="display: none;">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </form>
+
+        <div class="file-preview-area" id="filePreviewArea">
+            <h4 style="color: var(--gold); margin-bottom: 1rem;">Selected Images</h4>
+            <div class="file-preview-grid" id="filePreviewGrid"></div>
+        </div>
+
+        <div class="upload-progress" id="uploadProgress">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Uploading... 0%</div>
+        </div>
+
+        <div id="uploadStatus" class="upload-status"></div>
+
+        <div class="upload-summary" id="uploadSummary">
+            <h4>Upload Complete!</h4>
+            <div class="summary-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="uploadedCount">0</span>
+                    <span class="stat-label">Images Uploaded</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalSize">0 MB</span>
+                    <span class="stat-label">Total Size</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="uploadTime">0s</span>
+                    <span class="stat-label">Upload Time</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="conversionLoading" class="conversion-loading">
+    <div id="conversionLoadingBar" class="conversion-loading-bar"></div>
+    </div>
+    <div id="conversionStatus" class="conversion-status">
+        🔄 Converting HEIC files...
+    </div>
+    <!-- HEIC2ANY Library for HEIC conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+    <!-- Cloudinary Upload Widget Script -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <script>
+        // Configuration - REPLACE WITH YOUR ACTUAL CLOUDINARY SETTINGS
+const config = {
+    cloudName: 'michelleboutique', // Replace with your cloud name
+    uploadPreset: 'michelle', // Replace with your upload preset
+    maxFileSize: 10000000, // 10MB
+    allowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif'],
+    debug: true
+};
+
+// State management
+let selectedFiles = [];
+let uploadStartTime = null;
+let uploadedCount = 0;
+let totalUploadSize = 0;
+let convertingFiles = new Set(); // Track files being converted
+
+// DOM Elements
+const elements = {
+    categorySelect: document.getElementById('categorySelect'),
+    eventTitle: document.getElementById('eventTitle'),
+    eventDescription: document.getElementById('eventDescription'),
+    dragDropArea: document.getElementById('dragDropArea'),
+    fileInput: document.getElementById('fileInput'),
+    browseBtn: document.getElementById('browseBtn'),
+    uploadBtn: document.getElementById('uploadBtn'),
+    clearBtn: document.getElementById('clearBtn'),
+    filePreviewArea: document.getElementById('filePreviewArea'),
+    filePreviewGrid: document.getElementById('filePreviewGrid'),
+    uploadProgress: document.getElementById('uploadProgress'),
+    progressFill: document.getElementById('progressFill'),
+    progressText: document.getElementById('progressText'),
+    uploadStatus: document.getElementById('uploadStatus'),
+    uploadSummary: document.getElementById('uploadSummary')
+};
+
+// Initialize event listeners
+function initializeEventListeners() {
+    console.log('Initializing event listeners...');
+    
+    // File input
+    elements.fileInput.addEventListener('change', handleFileSelection);
+    
+    // Drag and drop
+    elements.dragDropArea.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Drag drop area clicked');
+        elements.fileInput.click();
+    });
+    elements.dragDropArea.addEventListener('dragover', handleDragOver);
+    elements.dragDropArea.addEventListener('dragleave', handleDragLeave);
+    elements.dragDropArea.addEventListener('drop', handleDrop);
+    
+    // Buttons
+    elements.browseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Browse button clicked');
+        elements.fileInput.click();
+    });
+    elements.uploadBtn.addEventListener('click', startUpload);
+    elements.clearBtn.addEventListener('click', clearAllFiles);
+    
+    // Category select change
+    elements.categorySelect.addEventListener('change', updateUploadButton);
+    
+    console.log('Event listeners initialized');
+}
+
+// File handling
+function handleFileSelection(event) {
+    console.log('File selection triggered', event);
+    const files = Array.from(event.target.files);
+    console.log('Selected files:', files);
+    
+    if (files.length === 0) {
+        console.log('No files selected');
+        return;
+    }
+    
+    processFiles(files);
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    elements.dragDropArea.classList.add('drag-over');
+}
+
+function handleDragLeave(event) {
+    event.preventDefault();
+    elements.dragDropArea.classList.remove('drag-over');
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    elements.dragDropArea.classList.remove('drag-over');
+    
+    const files = Array.from(event.dataTransfer.files);
+    processFiles(files);
+}
+
+function processFiles(files) {
+    showStatus('Processing files...', 'warning');
+    
+    const validFiles = files.filter(file => {
+        // Check file type
+        const fileName = file.name.toLowerCase();
+        const isValidFormat = config.allowedFormats.some(format => 
+            file.type.toLowerCase().includes(format) || fileName.endsWith(`.${format}`));
+        
+        if (!isValidFormat) {
+            showStatus(`File ${file.name} has unsupported format.`, 'warning');
+            return false;
+        }
+        
+        // Check file size
+        if (file.size > config.maxFileSize) {
+            showStatus(`File ${file.name} is too large (max 10MB).`, 'warning');
+            return false;
+        }
+        
+        // Check for duplicates
+        if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+            showStatus(`File ${file.name} is already selected.`, 'warning');
+            return false;
+        }
+        
+        return true;
+    });
+
+    if (validFiles.length === 0) {
+        hideStatus();
+        return;
+    }
+
+    // Process files (convert HEIC if needed)
+    processFilesWithConversion(validFiles);
+}
+
+async function processFilesWithConversion(files) {
+    const processedFiles = [];
+    let hasHeicFiles = files.some(file => {
+        const fileName = file.name.toLowerCase();
+        return fileName.endsWith('.heic') || fileName.endsWith('.heif') || 
+            file.type === 'image/heic' || file.type === 'image/heif';
+    });
+    
+    if (hasHeicFiles) {
+        showStatus('Converting HEIC files, please wait...', 'warning');
+    }
+    
+    for (const file of files) {
+        try {
+            const processedFile = await convertHeicIfNeeded(file);
+            processedFiles.push(processedFile);
+        } catch (error) {
+            console.error('Error processing file:', file.name, error);
+            showStatus(`Error processing ${file.name}: ${error.message}`, 'error');
+        }
+    }
+
+    selectedFiles.push(...processedFiles);
+    updateFilePreview();
+    updateUploadButton();
+    
+    if (processedFiles.length > 0) {
+        showStatus(`Added ${processedFiles.length} file(s) successfully.`, 'success');
+    }
+}
+
+async function convertHeicIfNeeded(file) {
+    const fileName = file.name.toLowerCase();
+    const isHeicFile = fileName.endsWith('.heic') || fileName.endsWith('.heif') || 
+                    file.type === 'image/heic' || file.type === 'image/heif';
+    
+    if (!isHeicFile) {
+        return file;
+    }
+
+    try {
+        // Show conversion loading
+        showConversionLoading(file.name);
+        
+        // Convert HEIC to JPEG
+        const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+            quality: 0.9
+        });
+
+        // Create new file object with JPEG extension
+        const newFileName = file.name.replace(/\.(heic|heif)$/i, '.jpg');
+        const convertedFile = new File([convertedBlob], newFileName, {
+            type: 'image/jpeg',
+            lastModified: file.lastModified
+        });
+
+        hideConversionLoading();
+        return convertedFile;
+        
+    } catch (error) {
+        hideConversionLoading();
+        throw new Error(`Failed to convert HEIC file: ${error.message}`);
+    }
+}
+
+// Conversion loading functions
+function showConversionLoading(fileName) {
+    const loadingEl = document.getElementById('conversionLoading');
+    const statusEl = document.getElementById('conversionStatus');
+    const loadingBar = document.getElementById('conversionLoadingBar');
+    
+    loadingEl.style.display = 'block';
+    statusEl.style.display = 'block';
+    statusEl.textContent = `🔄 Converting ${fileName}...`;
+    
+    // Animate loading bar
+    loadingBar.style.width = '0%';
+    setTimeout(() => {
+        loadingBar.style.width = '70%';
+    }, 100);
+}
+
+function hideConversionLoading() {
+    const loadingEl = document.getElementById('conversionLoading');
+    const statusEl = document.getElementById('conversionStatus');
+    const loadingBar = document.getElementById('conversionLoadingBar');
+    
+    // Complete the loading bar
+    loadingBar.style.width = '100%';
+    
+    setTimeout(() => {
+        loadingEl.style.display = 'none';
+        statusEl.style.display = 'none';
+        loadingBar.style.width = '0%';
+    }, 500);
+}
+
+function updateFilePreview() {
+    if (selectedFiles.length === 0) {
+        elements.filePreviewArea.style.display = 'none';
+        elements.clearBtn.style.display = 'none';
+        return;
+    }
+
+    elements.filePreviewArea.style.display = 'block';
+    elements.clearBtn.style.display = 'inline-flex';
+    
+    elements.filePreviewGrid.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+        const previewItem = createFilePreviewItem(file, index);
+        elements.filePreviewGrid.appendChild(previewItem);
+    });
+}
+
+function createFilePreviewItem(file, index) {
+    const item = document.createElement('div');
+    item.className = 'file-preview-item';
+    
+    // Create image preview
+    const img = document.createElement('img');
+    
+    // Handle HEIC files and converted files
+    if (file.type === 'image/heic' || file.type === 'image/heif' || 
+        file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+        // For HEIC files, show a placeholder or try to create object URL
+        try {
+            img.src = URL.createObjectURL(file);
+        } catch (error) {
+            // Fallback for HEIC files that can't be previewed
+            img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMzY0NTRGIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSIjRDRBRjM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IRUlDPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iNjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjRjVGNURDIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZTwvdGV4dD4KPC9zdmc+';
+        }
+    } else {
+        img.src = URL.createObjectURL(file);
+    }
+    
+    img.onload = () => {
+        if (img.src.startsWith('blob:')) {
+            URL.revokeObjectURL(img.src);
+        }
+    };
+    
+    // File info
+    const fileName = document.createElement('div');
+    fileName.className = 'file-name';
+    fileName.textContent = file.name;
+    
+    const fileSize = document.createElement('div');
+    fileSize.className = 'file-size';
+    fileSize.textContent = formatFileSize(file.size);
+    
+    // Add conversion indicator for original HEIC files
+    if (file.name.toLowerCase().includes('.heic') || 
+        file.name.toLowerCase().includes('.heif')) {
+        const conversionBadge = document.createElement('div');
+        conversionBadge.style.cssText = `
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: var(--warning);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        `;
+        conversionBadge.textContent = 'CONVERTED';
+        item.appendChild(conversionBadge);
+    }
+    
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.innerHTML = '×';
+    removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeFile(index);
+    });
+    
+    item.appendChild(img);
+    item.appendChild(fileName);
+    item.appendChild(fileSize);
+    item.appendChild(removeBtn);
+    
+    return item;
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    updateFilePreview();
+    updateUploadButton();
+    
+    if (selectedFiles.length === 0) {
+        hideStatus();
+    }
+}
+
+function clearAllFiles() {
+    selectedFiles = [];
+    elements.fileInput.value = '';
+    updateFilePreview();
+    updateUploadButton();
+    hideStatus();
+    hideUploadProgress();
+    hideUploadSummary();
+}
+
+function updateUploadButton() {
+    const hasFiles = selectedFiles.length > 0;
+    const hasCategory = elements.categorySelect.value !== '';
+    const isConverting = convertingFiles.size > 0;
+    
+    elements.uploadBtn.disabled = !hasFiles || !hasCategory || isConverting;
+    
+    if (isConverting) {
+        elements.uploadBtn.textContent = '🔄 Converting...';
+    } else {
+        elements.uploadBtn.textContent = `🚀 Upload ${selectedFiles.length} Image${selectedFiles.length !== 1 ? 's' : ''}`;
+    }
+}
+
+// Upload functionality
+async function startUpload() {
+    if (selectedFiles.length === 0 || !elements.categorySelect.value) {
+        showStatus('Please select files and a category before uploading.', 'error');
+        return;
+    }
+
+    uploadStartTime = Date.now();
+    uploadedCount = 0;
+    totalUploadSize = 0;
+    
+    showUploadProgress();
+    elements.uploadBtn.disabled = true;
+    elements.clearBtn.disabled = true;
+    
+    try {
+        await uploadFiles();
+        showUploadComplete();
+    } catch (error) {
+        console.error('Upload failed:', error);
+        showStatus(`Upload failed: ${error.message}`, 'error');
+    } finally {
+        elements.uploadBtn.disabled = false;
+        elements.clearBtn.disabled = false;
+        hideUploadProgress();
+    }
+}
+
+async function uploadFiles() {
+    const category = elements.categorySelect.value;
+    const eventTitle = elements.eventTitle.value.trim();
+    const eventDescription = elements.eventDescription ? elements.eventDescription.value.trim() : '';
+    
+    const totalFiles = selectedFiles.length;
+    let uploadedFiles = 0;
+    
+    for (const file of selectedFiles) {
+        try {
+            await uploadSingleFile(file, category, eventTitle, eventDescription);
+            uploadedFiles++;
+            uploadedCount++;
+            totalUploadSize += file.size;
+            
+            // Update progress
+            const progress = (uploadedFiles / totalFiles) * 100;
+            updateProgress(progress, `Uploaded ${uploadedFiles} of ${totalFiles} files`);
+            
+        } catch (error) {
+            console.error('Failed to upload file:', file.name, error);
+            showStatus(`Failed to upload ${file.name}: ${error.message}`, 'error');
+        }
+    }
+    
+    if (uploadedFiles === 0) {
+        throw new Error('No files were uploaded successfully');
+    }
+}
+
+async function uploadSingleFile(file, category, eventTitle, eventDescription) {
+    return new Promise((resolve, reject) => {
+        // Generate folder path and filename
+        const folderPath = generateFolderPath(category, eventTitle);
+        const filename = generateFilename(file.name);
+        const publicId = filename;
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', config.uploadPreset);
+        formData.append('public_id', publicId);
+        formData.append('folder', folderPath);
+        
+        // Add context/metadata
+        const context = {
+            category: category,
+            event_title: eventTitle || '',
+            event_description: eventDescription || '',
+            upload_date: new Date().toISOString(),
+            original_filename: file.name
+        };
+        
+        formData.append('context', Object.entries(context)
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join('|'));
+        
+        // Add tags
+        const tags = [category, 'boutique-upload'];
+        if (eventTitle) {
+            tags.push(sanitizeFileName(eventTitle));
+        }
+        formData.append('tags', tags.join(','));
+        
+        // Upload to Cloudinary
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${config.cloudName}/image/upload`);
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                resolve(response);
+            } else {
+                reject(new Error(`Upload failed with status ${xhr.status}`));
+            }
+        };
+        
+        xhr.onerror = function() {
+            reject(new Error('Network error during upload'));
+        };
+        
+        xhr.send(formData);
+    });
+}
+
+// Utility functions
+function generateFolderPath(category, eventTitle) {
+    if (eventTitle) {
+        return `${category}/${sanitizeFileName(eventTitle)}`;
+    }
+    return `${category}/${getCurrentDateFolder()}`;
+}
+
+function generateFilename(originalName) {
+    const date = getCurrentDate();
+    const lastDotIndex = originalName.lastIndexOf('.');
+    const extension = lastDotIndex > -1 ? originalName.substring(lastDotIndex + 1).toLowerCase() : 'jpg';
+    const baseName = lastDotIndex > -1 ? originalName.substring(0, lastDotIndex) : originalName;
+    const sanitizedBaseName = sanitizeFileName(baseName);
+    
+    return `${date}_${sanitizedBaseName}.${extension}`;
+}
+
+function sanitizeFileName(name) {
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .substring(0, 50);
+}
+
+function getCurrentDate() {
+    const now = new Date();
+    return now.toISOString().split('T')[0]; // YYYY-MM-DD format
+}
+
+function getCurrentDateFolder() {
+    return getCurrentDate();
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Progress and status functions
+function showUploadProgress() {
+    elements.uploadProgress.style.display = 'block';
+    elements.dragDropArea.classList.add('uploading');
+}
+
+function hideUploadProgress() {
+    elements.uploadProgress.style.display = 'none';
+    elements.dragDropArea.classList.remove('uploading');
+}
+
+function updateProgress(percentage, text) {
+    elements.progressFill.style.width = percentage + '%';
+    elements.progressText.textContent = text + ` (${Math.round(percentage)}%)`;
+}
+
+function showStatus(message, type) {
+    elements.uploadStatus.className = `upload-status ${type}`;
+    elements.uploadStatus.textContent = message;
+    elements.uploadStatus.style.display = 'block';
+    
+    // Auto-hide success/warning messages after 5 seconds
+    if (type === 'success' || type === 'warning') {
+        setTimeout(() => {
+            hideStatus();
+        }, 5000);
+    }
+}
+
+function hideStatus() {
+    elements.uploadStatus.style.display = 'none';
+}
+
+function showUploadComplete() {
+    const uploadTime = Math.round((Date.now() - uploadStartTime) / 1000);
+    const totalSizeMB = (totalUploadSize / (1024 * 1024)).toFixed(2);
+    
+    // Update summary stats
+    document.getElementById('uploadedCount').textContent = uploadedCount;
+    document.getElementById('totalSize').textContent = totalSizeMB + ' MB';
+    document.getElementById('uploadTime').textContent = uploadTime + 's';
+    
+    // Show summary
+    elements.uploadSummary.style.display = 'block';
+    
+    // Show success status
+    showStatus(`Successfully uploaded ${uploadedCount} image${uploadedCount !== 1 ? 's' : ''}!`, 'success');
+    
+    // Clear files after successful upload
+    setTimeout(() => {
+        clearAllFiles();
+    }, 3000);
+}
+
+function hideUploadSummary() {
+    elements.uploadSummary.style.display = 'none';
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    
+    // Initialize event listeners
+    initializeEventListeners();
+    
+    // Check if Cloudinary config is set
+    if (config.cloudName === 'your-cloudinary-name' || config.uploadPreset === 'your-upload-preset') {
+        showStatus('Please configure your Cloudinary settings in the JavaScript code.', 'warning');
+    }
+    
+    // Check for HEIC support
+    if (typeof heic2any === 'undefined') {
+        console.warn('HEIC2ANY library not loaded. HEIC files may not be supported.');
+    }
+    
+    console.log('Initialization complete');
+});
+
+// Prevent default drag behaviors on the document
+document.addEventListener('dragover', (e) => e.preventDefault());
+document.addEventListener('drop', (e) => e.preventDefault());
+</script>
+
+</body>
+</html>

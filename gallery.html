@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - Michelle's Boutique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-
-    <style>
-        /* CSS Variables */
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Gallery - Michelle's Boutique
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&amp;family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon"/>
+  <style>
+   /* CSS Variables */
         :root {
             --cream: #f5f5dc;
             --dark-cream: #e6d7a3;
@@ -25,7 +26,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            
         }
 
         body {
@@ -118,6 +118,101 @@
             margin-bottom: 3rem;
         }
 
+        .category-instructions {
+            background: rgba(54, 69, 79, 0.3);
+            border: 2px solid var(--charcoal);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--dark-cream);
+            text-align: center;
+        }
+
+        .category-instructions h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .category-instructions ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .category-instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .category-instructions code {
+            background: rgba(212, 175, 55, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+            color: var(--gold);
+        }
+
+        /* Category Filter Styles */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding: 1rem 0;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            color: var(--dark-cream);
+            border: 2px solid var(--charcoal);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: capitalize;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .filter-btn:hover::before {
+            left: 100%;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--charcoal);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .filter-btn .count {
+            margin-left: 0.5rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
         .loading-spinner {
             display: flex;
             justify-content: center;
@@ -147,19 +242,35 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
+            transition: all 0.3s ease;
         }
 
         .gallery-item-full {
-            background: var(--light-gray);
-            aspect-ratio: 4/3;
+            /* Remove fallback background */
+            background: none;
+
+            aspect-ratio: 4 / 3;
             border-radius: 15px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+
+            /* These ensure the image fills the box */
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
+
             border: 3px solid transparent;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+
+        .gallery-item-full.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
         }
 
         .gallery-item-full:hover {
@@ -184,6 +295,20 @@
             transform: translateY(0);
         }
 
+        .gallery-item-category {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(212, 175, 55, 0.9);
+            color: var(--charcoal);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            backdrop-filter: blur(5px);
+        }
+
         .back-to-main {
             display: inline-block;
             padding: 1rem 2rem;
@@ -199,6 +324,24 @@
         .back-to-main:hover {
             background: var(--dark-gold);
             transform: translateY(-2px);
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--dark-cream);
+            font-size: 1.2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(54, 69, 79, 0.2);
+            border-radius: 15px;
+            border: 2px dashed var(--charcoal);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            display: block;
         }
 
         /* Modal Styles */
@@ -285,6 +428,18 @@
             border-radius: 25px;
             text-align: center;
             z-index: 1001;
+        }
+
+        .modal-category {
+            background: var(--gold);
+            color: var(--charcoal);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-top: 0.5rem;
+            display: inline-block;
         }
 
         /* Navigation Styles */
@@ -375,6 +530,21 @@
             color: var(--dark-gold);
             font-size: 1.2rem;
             margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(54, 69, 79, 0.2);
+            border-radius: 15px;
+            border: 2px solid var(--charcoal);
+        }
+
+        .debug-info {
+            background: rgba(54, 69, 79, 0.1);
+            border: 1px solid var(--charcoal);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--dark-cream);
         }
 
         @media (max-width: 768px) {
@@ -399,6 +569,15 @@
             .nav-menu {
                 gap: 1rem;
             }
+
+            .category-filters {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1.5rem;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -406,109 +585,260 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
-</head>
+        .gallery-button-container {
+    text-align: center;
+    margin-top: 3rem;
+}
 
-<body>
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo serif">Michelle's Boutique</a>
-            <ul class="nav-menu">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#services">Services</a></li>
-                <li><a href="gallery.html" class="active">Gallery</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+.gallery-btn {
+    display: inline-block;
+    padding: 16px 50px;
+    background: linear-gradient(135deg, #d4af37 0%, #b8941f 50%, #d4af37 100%);
+    color: #2c2c2c;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
 
-    <section class="breadcrumb">
-        <div class="breadcrumb-content">
-            <a href="index.html">Home</a>
-            <span>/</span>
-            <span>Gallery</span>
-        </div>
-    </section>
+.gallery-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
 
-    <section class="gallery-hero">
-        <div class="gallery-hero-content">
-            <h1 class="serif">Our Beautiful Creations</h1>
-            <p>Explore our portfolio of stunning events and memorable celebrations</p>
-        </div>
-    </section>
+.gallery-btn:hover::after {
+    left: 100%;
+}
 
-    <section class="gallery-main">
-        <div class="container">
-            <a href="index.html" class="back-to-main">← Back to Main Site</a>
-            
-            <h2 class="section-title serif">Captured Moments</h2>
-            <p class="section-subtitle">Every Event Tells a Story</p>
+.gallery-btn:hover {
+    background: linear-gradient(135deg, #e6c158 0%, #c9a634 50%, #e6c158 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
 
-            <div class="loading-spinner" id="loadingSpinner">
-                <div class="spinner"></div>
-                <span>Loading gallery...</span>
-            </div>
-
-            <div class="error-message" id="errorMessage" style="display: none;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <p>Unable to load gallery images. Please check your Cloudinary configuration.</p>
-            </div>
-
-            <div class="full-gallery-grid" id="galleryGrid" style="display: none;">
-                </div>
-        </div>
-    </section>
-
-    <div class="modal" id="imageModal">
-        <span class="modal-close" id="modalClose">&times;</span>
-        <button id="prevBtn" class="modal-nav left" aria-label="Previous Image">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-        <img class="modal-content" id="modalImage" alt="Gallery Image">
-        <button id="nextBtn" class="modal-nav right">&#10095;</button>
-        <div class="modal-info" id="modalInfo">
-            <span id="imageCounter">1 / 10</span>
-        </div>
+.gallery-btn:active {
+    transform: translateY(0);
+}
+  </style>
+ </head>
+ <body>
+  <nav class="navbar" id="navbar">
+   <div class="nav-container">
+    <a class="logo serif" href="index.html">
+     Michelle's Boutique
+    </a>
+    <ul class="nav-menu">
+     <li>
+      <a href="index.html#home">
+       Home
+      </a>
+     </li>
+     <li>
+      <a href="index.html#about">
+       About
+      </a>
+     </li>
+     <li>
+      <a href="index.html#services">
+       Services
+      </a>
+     </li>
+     <li>
+      <a class="active" href="gallery.html">
+       Gallery
+      </a>
+     </li>
+     <li>
+      <a href="index.html#contact">
+       Contact
+      </a>
+     </li>
+    </ul>
+   </div>
+  </nav>
+  <section class="breadcrumb">
+   <div class="breadcrumb-content">
+    <a href="index.html">
+     Home
+    </a>
+    <span>
+     /
+    </span>
+    <span>
+     Gallery
+    </span>
+   </div>
+  </section>
+  <section class="gallery-hero">
+   <div class="gallery-hero-content">
+    <h1 class="serif">
+     Our Beautiful Creations
+    </h1>
+    <p>
+     Explore our portfolio of stunning events and memorable celebrations
+    </p>
+   </div>
+  </section>
+  <section class="gallery-main">
+   <div class="container">
+    <a class="back-to-main" href="index.html">
+     ← Back to Main Site
+    </a>
+    <h2 class="section-title serif">
+     Captured Moments
+    </h2>
+    <p class="section-subtitle">
+     Every Event Tells a Story
+    </p>
+    <div class="loading-spinner" id="loadingSpinner">
+     <div class="spinner">
+     </div>
+     <span>
+      Loading gallery...
+     </span>
     </div>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="index.html#home">Home</a>
-                <a href="index.html#about">About</a>
-                <a href="index.html#services">Services</a>
-                <a href="gallery.html">Gallery</a>
-                <a href="index.html#contact">Contact</a>
-                <a href="admin.html">Upload Images to Gallery</a>
-            </div>
-            <p>&copy; 2025 Michelle's Boutique. All rights reserved. | Transforming Moments Into Memories</p>
-        </div>
-    </footer>
-
-    <script>
-// Cloudinary Configuration
+    <div class="error-message" id="errorMessage" style="display: none;">
+     <i class="fas fa-exclamation-triangle">
+     </i>
+     <h3>
+      Unable to load gallery images
+     </h3>
+     <p>
+      Please check your Cloudinary configuration below:
+     </p>
+     <div class="debug-info" id="debugInfo">
+     </div>
+    </div>
+    <div class="category-filters" id="categoryFilters" style="display: none;">
+     <!-- Category filter buttons will be generated here -->
+    </div>
+    <div class="no-results" id="noResults" style="display: none;">
+     <i class="fas fa-search">
+     </i>
+     <h3>
+      Waiting for us to make your next event beautiful
+     </h3>
+     <p>
+      Try selecting a different category or check back later.
+     </p>
+     <div class="gallery-button-container">
+      <a class="gallery-btn" href="index.html#contact">
+       Contact US
+      </a>
+      <!-- <p class="gallery-note">See all our beautiful creations</p> -->
+     </div>
+    </div>
+    <div class="full-gallery-grid" id="galleryGrid" style="display: none;">
+     <!-- Gallery items will be generated here -->
+    </div>
+   </div>
+  </section>
+  <div class="modal" id="imageModal">
+   <span class="modal-close" id="modalClose">
+    ×
+   </span>
+   <button aria-label="Previous Image" class="modal-nav left" id="prevBtn">
+    <svg fill="none" height="30" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="30">
+     <polyline points="15 18 9 12 15 6">
+     </polyline>
+    </svg>
+   </button>
+   <img alt="Gallery Image" class="modal-content" id="modalImage"/>
+   <button class="modal-nav right" id="nextBtn">
+    ❯
+   </button>
+   <div class="modal-info" id="modalInfo">
+    <span id="imageCounter">
+     1 / 10
+    </span>
+    <div class="modal-category" id="modalCategory">
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <div class="footer-content">
+    <div class="footer-links">
+     <a href="index.html#home">
+      Home
+     </a>
+     <a href="index.html#about">
+      About
+     </a>
+     <a href="index.html#services">
+      Services
+     </a>
+     <a href="gallery.html">
+      Gallery
+     </a>
+     <a href="index.html#contact">
+      Contact
+     </a>
+     <a href="admin.html">
+      Upload Images to Gallery
+     </a>
+    </div>
+    <p>
+     © 2025 Michelle's Boutique. All rights reserved. | Transforming Moments Into Memories
+    </p>
+   </div>
+  </footer>
+  <script>
+   // Updated Cloudinary configuration with preset support
 const cloudinaryConfig = {
-    cloudName: 'michelleboutique', // Your Cloudinary cloud name.
-    tag: 'gallery' // This tag should be on all images you want to display.
+    cloudName: 'michelleboutique',
+    uploadPreset: 'michelle', // Replace with your actual preset name
+    apiKey: '', // Not needed for public access with presets
+    maxResults: 100
 };
 
 // Gallery state
 let allImages = [];
+let filteredImages = [];
 let currentImageIndex = 0;
+let currentFilter = 'all';
+let categories = new Map();
+
+// Define all possible categories from your form
+const CATEGORY_DEFINITIONS = {
+    'weddings': 'Weddings',
+    'birthday-parties': 'Birthday Parties',
+    'corporate-events': 'Corporate Events',
+    'baby-showers': 'Baby Showers',
+    'anniversaries': 'Anniversaries',
+    'graduation-parties': 'Graduation Parties',
+    'holiday-parties': 'Holiday Parties',
+    'bridal-showers': 'Bridal Showers',
+    'engagement-parties': 'Engagement Parties',
+    'custom': 'Custom Events'
+};
 
 // DOM elements
 const loadingSpinner = document.getElementById('loadingSpinner');
 const errorMessage = document.getElementById('errorMessage');
+const errorText = document.getElementById('errorText');
 const galleryGrid = document.getElementById('galleryGrid');
+const categoryFilters = document.getElementById('categoryFilters');
+const noResults = document.getElementById('noResults');
 const modal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const modalClose = document.getElementById('modalClose');
 const nextBtn = document.getElementById('nextBtn');
 const prevBtn = document.getElementById('prevBtn');
 const imageCounter = document.getElementById('imageCounter');
+const modalCategory = document.getElementById('modalCategory');
 
 // Initialize gallery on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -516,167 +846,1024 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 
-// Initialize gallery
+// Initialize gallery with comprehensive category checking
 async function initializeGallery() {
     try {
         showLoading();
-        await loadCloudinaryImages();
-        renderGallery();
-        hideLoading();
+        await loadAllCategoryImages();
+        
+        if (allImages.length > 0) {
+            generateCategoryFilters();
+            filterImages('all');
+            hideLoading();
+        } else {
+            throw new Error('No images found in any category. Please ensure images are uploaded and properly organized by category.');
+        }
     } catch (error) {
         console.error('Error initializing gallery:', error);
         showError(error.message);
     }
 }
 
-// Load images from Cloudinary
-async function loadCloudinaryImages() {
-    if (!cloudinaryConfig.cloudName || cloudinaryConfig.cloudName === 'YOUR_CLOUD_NAME') {
-        throw new Error('Please configure your Cloudinary cloud name in the script.');
-    }
-
-    const url = `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/${cloudinaryConfig.tag}.json`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Cloudinary request failed: ${response.statusText}`);
+// Load images from all defined categories
+async function loadAllCategoryImages() {
+    console.log('Loading images from all categories...');
+    
+    let allLoadedImages = [];
+    
+    // Check each category defined in your form
+    for (const [categoryKey, categoryName] of Object.entries(CATEGORY_DEFINITIONS)) {
+        console.log(`Checking category: ${categoryKey} (${categoryName})`);
+        
+        try {
+            const categoryImages = await loadImagesFromCategory(categoryKey, categoryName);
+            if (categoryImages.length > 0) {
+                console.log(`Found ${categoryImages.length} images in ${categoryName}`);
+                allLoadedImages = allLoadedImages.concat(categoryImages);
+            } else {
+                console.log(`No images found in ${categoryName}`);
+            }
+        } catch (error) {
+            console.warn(`Error loading images from ${categoryName}:`, error);
         }
-        const data = await response.json();
-
-        allImages = data.resources.map(image => ({
-            id: image.public_id,
-            // For the grid view, we use a transformed (smaller) image for performance.
-            url: `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_800,q_auto,f_auto/${image.public_id}`,
-            // For the modal view, we use the full-quality image.
-            fullUrl: `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.public_id}`,
-            // You can add context/metadata in Cloudinary and access it here.
-            title: image.public_id.replace(/_/g, ' ')
-        }));
-
-    } catch (error) {
-        console.error('Error fetching from Cloudinary:', error);
-        throw new Error('Unable to load images from Cloudinary. Please check the console for more details.');
     }
+    
+    // Try additional common tags and folder names
+    const additionalTags = [
+        'gallery', 'public', 'all', 'photos', 'images', 'portfolio',
+        'wedding', 'birthday', 'corporate', 'family', 'event', 'portrait', 'party'
+    ];
+    
+    for (const tag of additionalTags) {
+        try {
+            const tagImages = await loadImagesFromTag(tag);
+            if (tagImages.length > 0) {
+                console.log(`Found ${tagImages.length} images with tag: ${tag}`);
+                allLoadedImages = allLoadedImages.concat(tagImages);
+            }
+        } catch (error) {
+            console.warn(`Error loading images with tag ${tag}:`, error);
+        }
+    }
+    
+    // Remove duplicates based on public_id
+    const uniqueImages = removeDuplicateImages(allLoadedImages);
+    
+    // If still no images, try fallback methods
+    if (uniqueImages.length === 0) {
+        console.log('No images found via category/tag methods. Trying fallback approaches...');
+        const fallbackImages = await tryFallbackImageLoading();
+        uniqueImages.push(...fallbackImages);
+    }
+    
+    // Final fallback to demo images for testing
+    if (uniqueImages.length === 0) {
+        console.warn('No images found via any method. Using demo images for testing.');
+        uniqueImages.push(...createDemoImages());
+    }
+    
+    allImages = uniqueImages;
+    
+    // Count categories
+    categories.clear();
+    allImages.forEach(image => {
+        categories.set(image.category, (categories.get(image.category) || 0) + 1);
+    });
+    
+    // Sort images by timestamp (newest first)
+    allImages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    console.log(`Successfully loaded ${allImages.length} images total`);
+    console.log('Categories with images:', Array.from(categories.keys()));
 }
 
-// Render gallery
-function renderGallery() {
-    galleryGrid.innerHTML = '';
+// Load images from a specific category
+async function loadImagesFromCategory(categoryKey, categoryName) {
+    const categoryImages = [];
+    
+    // Try multiple endpoint formats for each category
+    const endpoints = [
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/${categoryKey}.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/${categoryKey.replace('-', '_')}.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/${categoryKey.replace('-', '')}.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/folder/${categoryKey}.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/folder/${categoryKey.replace('-', '/')}.json`
+    ];
+    
+    for (const endpoint of endpoints) {
+        try {
+            console.log(`Trying endpoint: ${endpoint}`);
+            const response = await fetch(endpoint);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`Response from ${endpoint}:`, data);
+                
+                if (data.resources && data.resources.length > 0) {
+                    const processedImages = processCloudinaryImages(data.resources, categoryName);
+                    categoryImages.push(...processedImages);
+                    console.log(`Added ${processedImages.length} images from ${endpoint}`);
+                    break; // Success, no need to try other endpoints for this category
+                } else if (data.public_ids && data.public_ids.length > 0) {
+                    const processedImages = processPublicIdList(data.public_ids, categoryName);
+                    categoryImages.push(...processedImages);
+                    console.log(`Added ${processedImages.length} images from public_ids in ${endpoint}`);
+                    break; // Success, no need to try other endpoints for this category
+                }
+            } else {
+                console.log(`Endpoint ${endpoint} returned ${response.status}: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.warn(`Endpoint ${endpoint} failed:`, error);
+        }
+    }
+    
+    return categoryImages;
+}
 
-    allImages.forEach((image, index) => {
-        const galleryItem = document.createElement('div');
-        galleryItem.className = 'gallery-item-full';
-        galleryItem.style.backgroundImage = `url('${image.url}')`;
-        galleryItem.setAttribute('data-index', index);
+// Load images from a specific tag
+async function loadImagesFromTag(tag) {
+    const tagImages = [];
+    
+    try {
+        const endpoint = `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/${tag}.json`;
+        console.log(`Trying tag endpoint: ${endpoint}`);
+        
+        const response = await fetch(endpoint);
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log(`Response for tag ${tag}:`, data);
+            
+            if (data.resources && data.resources.length > 0) {
+                const processedImages = processCloudinaryImages(data.resources);
+                tagImages.push(...processedImages);
+            } else if (data.public_ids && data.public_ids.length > 0) {
+                const processedImages = processPublicIdList(data.public_ids);
+                tagImages.push(...processedImages);
+            }
+        }
+    } catch (error) {
+        console.warn(`Tag endpoint ${tag} failed:`, error);
+    }
+    
+    return tagImages;
+}
 
-        galleryItem.addEventListener('click', () => openModal(index));
+// Try fallback image loading methods
+async function tryFallbackImageLoading() {
+    const fallbackImages = [];
+    
+    // Try general endpoints
+    const generalEndpoints = [
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/all.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/gallery.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list/public.json`,
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/list.json`
+    ];
+    
+    for (const endpoint of generalEndpoints) {
+        try {
+            console.log(`Trying fallback endpoint: ${endpoint}`);
+            const response = await fetch(endpoint);
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`Fallback endpoint response:`, data);
+                
+                if (data.resources && data.resources.length > 0) {
+                    const processedImages = processCloudinaryImages(data.resources);
+                    fallbackImages.push(...processedImages);
+                    console.log(`Found ${processedImages.length} images from fallback endpoint`);
+                    break; // Success, no need to try other fallback endpoints
+                } else if (data.public_ids && data.public_ids.length > 0) {
+                    const processedImages = processPublicIdList(data.public_ids);
+                    fallbackImages.push(...processedImages);
+                    console.log(`Found ${processedImages.length} images from fallback endpoint public_ids`);
+                    break; // Success, no need to try other fallback endpoints
+                }
+            }
+        } catch (error) {
+            console.warn(`Fallback endpoint ${endpoint} failed:`, error);
+        }
+    }
+    
+    return fallbackImages;
+}
 
-        galleryGrid.appendChild(galleryItem);
+// Remove duplicate images based on public_id
+function removeDuplicateImages(images) {
+    const uniqueImages = [];
+    const seenIds = new Set();
+    
+    images.forEach(image => {
+        if (!seenIds.has(image.id)) {
+            seenIds.add(image.id);
+            uniqueImages.push(image);
+        }
+    });
+    
+    return uniqueImages;
+}
+
+// Create demo images for testing when Cloudinary fails
+function createDemoImages() {
+    console.log('Creating demo images for testing...');
+    
+    return [
+        {
+            id: 'demo/wedding1',
+            url: 'https://via.placeholder.com/800x600/ff6b6b/ffffff?text=Wedding+Photo+1',
+            fullUrl: 'https://via.placeholder.com/1200x900/ff6b6b/ffffff?text=Wedding+Photo+1',
+            title: 'Beautiful Wedding Ceremony',
+            category: 'Weddings',
+            timestamp: new Date().toISOString(),
+            tags: ['wedding', 'ceremony'],
+            width: 800,
+            height: 600,
+            format: 'jpg'
+        },
+        {
+            id: 'demo/birthday1',
+            url: 'https://via.placeholder.com/800x600/4ecdc4/ffffff?text=Birthday+Party+1',
+            fullUrl: 'https://via.placeholder.com/1200x900/4ecdc4/ffffff?text=Birthday+Party+1',
+            title: 'Birthday Celebration',
+            category: 'Birthday Parties',
+            timestamp: new Date().toISOString(),
+            tags: ['birthday', 'party'],
+            width: 800,
+            height: 600,
+            format: 'jpg'
+        },
+        {
+            id: 'demo/corporate1',
+            url: 'https://via.placeholder.com/800x600/45b7d1/ffffff?text=Corporate+Event+1',
+            fullUrl: 'https://via.placeholder.com/1200x900/45b7d1/ffffff?text=Corporate+Event+1',
+            title: 'Corporate Meeting',
+            category: 'Corporate Events',
+            timestamp: new Date().toISOString(),
+            tags: ['corporate', 'business'],
+            width: 800,
+            height: 600,
+            format: 'jpg'
+        },
+        {
+            id: 'demo/baby1',
+            url: 'https://via.placeholder.com/800x600/95a5a6/ffffff?text=Baby+Shower+1',
+            fullUrl: 'https://via.placeholder.com/1200x900/95a5a6/ffffff?text=Baby+Shower+1',
+            title: 'Baby Shower Celebration',
+            category: 'Baby Showers',
+            timestamp: new Date().toISOString(),
+            tags: ['baby', 'shower'],
+            width: 800,
+            height: 600,
+            format: 'jpg'
+        },
+        {
+            id: 'demo/graduation1',
+            url: 'https://via.placeholder.com/800x600/e74c3c/ffffff?text=Graduation+Party+1',
+            fullUrl: 'https://via.placeholder.com/1200x900/e74c3c/ffffff?text=Graduation+Party+1',
+            title: 'Graduation Party',
+            category: 'Graduation Parties',
+            timestamp: new Date().toISOString(),
+            tags: ['graduation', 'party'],
+            width: 800,
+            height: 600,
+            format: 'jpg'
+        }
+    ];
+}
+
+// Process Cloudinary image data into our format
+function processCloudinaryImages(resources, forcedCategory = null) {
+    return resources.map(image => {
+        // Use the original secure_url for both thumbnail and full image
+        let secureUrl = image.secure_url || image.url || '';
+        
+        // Create optimized thumbnail URL
+        let imageUrl = secureUrl;
+        if (secureUrl.includes('/upload/')) {
+            imageUrl = secureUrl.replace('/upload/', '/upload/w_800,h_600,c_fill,q_auto:good,f_auto/');
+        }
+        
+        // Use original secure_url for full image (this is the key fix)
+        let fullImageUrl = secureUrl;
+        
+        console.log(`Processing image: ${image.public_id}`);
+        console.log(`Original URL: ${secureUrl}`);
+        console.log(`Thumbnail URL: ${imageUrl}`);
+        console.log(`Full URL: ${fullImageUrl}`);
+        
+        return {
+            id: image.public_id,
+            url: imageUrl,
+            fullUrl: fullImageUrl,
+            title: formatImageTitle(image.public_id),
+            category: forcedCategory || extractCategoryFromPath(image.public_id),
+            timestamp: image.created_at || new Date().toISOString(),
+            tags: image.tags || [],
+            width: image.width,
+            height: image.height,
+            format: image.format,
+            version: image.version,
+            rawData: image
+        };
     });
 }
 
-// Modal functionality
-function openModal(index) {
-    currentImageIndex = index;
-    modalImage.src = allImages[index].fullUrl;
+// Process public_ids list (different response format)
+function processPublicIdList(publicIds, forcedCategory = null) {
+    return publicIds.map(publicId => {
+        // Build URLs directly from public_id
+        const imageUrl = buildOptimizedImageUrl(publicId);
+        const fullImageUrl = buildFullImageUrl(publicId);
+        
+        console.log(`Processing public_id: ${publicId}`);
+        console.log(`Generated URLs - Optimized: ${imageUrl}, Full: ${fullImageUrl}`);
+        
+        return {
+            id: publicId,
+            url: imageUrl,
+            fullUrl: fullImageUrl,
+            title: formatImageTitle(publicId),
+            category: forcedCategory || extractCategoryFromPath(publicId),
+            timestamp: new Date().toISOString(),
+            tags: [],
+            width: null,
+            height: null,
+            format: 'jpg',
+            version: null,
+            rawData: { public_id: publicId }
+        };
+    });
+}
+
+// Build optimized image URL for gallery thumbnails
+function buildOptimizedImageUrl(publicId) {
+    // Handle case where public_id might already include the extension
+    let cleanPublicId = publicId;
+    if (cleanPublicId.includes('.')) {
+        cleanPublicId = cleanPublicId.substring(0, cleanPublicId.lastIndexOf('.'));
+    }
+    
+    let url = `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/w_800,h_600,c_fill,q_auto:good,f_auto/${cleanPublicId}`;
+    
+    console.log(`Built optimized URL: ${url}`);
+    return url;
+}
+
+// Build full resolution image URL for modal - FIXED VERSION
+function buildFullImageUrl(publicId) {
+    if (!publicId) {
+        console.warn('Missing public_id for image');
+        return '';
+    }
+
+    // Clean the public_id - remove extension if present
+    let cleanPublicId = publicId;
+    if (cleanPublicId.includes('.')) {
+        cleanPublicId = cleanPublicId.substring(0, cleanPublicId.lastIndexOf('.'));
+    }
+
+    // Build the URL with minimal transformations for best compatibility
+    let url = `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/q_auto:best,f_auto/${cleanPublicId}`;
+
+    console.log('Generated full image URL:', url);
+    return url;
+}
+
+// Extract category from the file path or tags
+function extractCategoryFromPath(publicId) {
+    const parts = publicId.split('/');
+    
+    if (parts.length > 1) {
+        const mainFolder = parts[0].toLowerCase();
+        
+        // Check if it matches any of our defined categories
+        for (const [categoryKey, categoryName] of Object.entries(CATEGORY_DEFINITIONS)) {
+            if (mainFolder === categoryKey || 
+                mainFolder === categoryKey.replace('-', '_') || 
+                mainFolder === categoryKey.replace('-', '')) {
+                return categoryName;
+            }
+        }
+        
+        // Additional mappings for common variations
+        const categoryMap = {
+            'wedding': 'Weddings',
+            'weddings': 'Weddings',
+            'birthday': 'Birthday Parties',
+            'birthdays': 'Birthday Parties',
+            'corporate': 'Corporate Events',
+            'business': 'Corporate Events',
+            'baby': 'Baby Showers',
+            'babies': 'Baby Showers',
+            'graduation': 'Graduation Parties',
+            'graduations': 'Graduation Parties',
+            'anniversary': 'Anniversaries',
+            'anniversaries': 'Anniversaries',
+            'holiday': 'Holiday Parties',
+            'holidays': 'Holiday Parties',
+            'bridal': 'Bridal Showers',
+            'engagement': 'Engagement Parties',
+            'family': 'Family Portraits',
+            'families': 'Family Portraits',
+            'portrait': 'Portraits',
+            'portraits': 'Portraits',
+            'event': 'Custom Events',
+            'events': 'Custom Events',
+            'party': 'Custom Events',
+            'parties': 'Custom Events'
+        };
+
+        return categoryMap[mainFolder] || formatCategoryName(mainFolder);
+    }
+    
+    return 'Custom Events';
+}
+
+// Format category name
+function formatCategoryName(name) {
+    return name.split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
+// Format image title from public_id
+function formatImageTitle(publicId) {
+    const parts = publicId.split('/');
+    let filename = parts[parts.length - 1];
+    
+    // Remove file extension
+    filename = filename.replace(/\.(jpg|jpeg|png|gif|webp)$/i, '');
+    
+    // Remove date patterns
+    filename = filename.replace(/^\d{4}-\d{2}-\d{2}[_-]?/, '');
+    
+    // Replace underscores and hyphens with spaces
+    filename = filename.replace(/[_-]/g, ' ');
+    
+    // Remove img/image prefixes
+    filename = filename.replace(/^(img|image)\s+/i, '');
+    
+    // Capitalize words
+    filename = filename.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ')
+        .trim();
+    
+    return filename || 'Gallery Image';
+}
+
+// Generate category filter buttons - only for categories that have images
+
+function generateCategoryFilters() {
+    const filterContainer = categoryFilters;
+    filterContainer.innerHTML = '';
+
+    // Add "All" button (always shown)
+    const allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn active';
+    allBtn.textContent = 'All';
+    allBtn.dataset.category = 'all';
+
+    const allCount = document.createElement('span');
+    allCount.className = 'count';
+    allCount.textContent = `(${allImages.length})`; // No space before count
+    allBtn.appendChild(allCount);
+
+    filterContainer.appendChild(allBtn);
+
+    // Add buttons only for categories that have images (count > 0)
+    Object.values(CATEGORY_DEFINITIONS)
+        .sort((a, b) => a.localeCompare(b))
+        .forEach(category => {
+            const count = categories.get(category) || 0;
+            // if (count <= 0) return;  // skip button if count is zero or less
+            // if (count > 0) {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = category;
+                btn.dataset.category = category.toLowerCase();
+
+                const countSpan = document.createElement('span');
+                countSpan.className = 'count';
+                countSpan.textContent = `(${count})`; // No space before count
+                btn.appendChild(countSpan);
+
+                filterContainer.appendChild(btn);
+            // }
+        });
+
+    categoryFilters.style.display = 'flex';
+}
+
+
+
+
+// Filter images by category
+function filterImages(category) {
+    currentFilter = category;
+    
+    if (category === 'all') {
+        filteredImages = [...allImages];
+    } else {
+        filteredImages = allImages.filter(image => 
+            image.category.toLowerCase() === category.toLowerCase()
+        );
+    }
+    
+    // Update active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category === category) {
+            btn.classList.add('active');
+        }
+    });
+    
+    renderGallery();
+}
+
+// Render gallery grid
+function renderGallery() {
+    const grid = galleryGrid;
+
+    if (filteredImages.length === 0) {
+        grid.style.display = 'none';
+        noResults.style.display = 'block';
+        return;
+    }
+
+    noResults.style.display = 'none';
+    grid.innerHTML = '';
+
+    filteredImages.forEach((image, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item-full';
+
+        const img = new Image();
+        img.onload = function() {
+            console.log(`Image loaded successfully: ${image.url}`);
+            item.style.backgroundImage = `url(${image.url})`;
+            item.style.backgroundSize = 'cover';
+            item.style.backgroundPosition = 'center';
+            item.style.backgroundRepeat = 'no-repeat';
+        };
+
+        img.onerror = function() {
+            console.error(`Failed to load image: ${image.url}`);
+            tryImageFallbacks(item, image);
+        };
+
+        img.src = image.url;
+
+        item.onclick = () => openModal(index);
+
+        // Category badge
+        const categoryBadge = document.createElement('div');
+        categoryBadge.className = 'gallery-item-category';
+        categoryBadge.textContent = image.category;
+
+        item.appendChild(categoryBadge);
+        grid.appendChild(item);
+    });
+
+    grid.style.display = 'grid';
+}
+
+// Try multiple fallback approaches for failed images
+function tryImageFallbacks(item, image) {
+    const fallbackUrls = [
+        // Simple Cloudinary URL without transformations
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}`,
+        // With jpg extension
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.jpg`,
+        // With png extension
+        `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.png`,
+        // Final placeholder
+        'https://via.placeholder.com/800x600/cccccc/666666?text=Image%20Not%20Found'
+    ];
+    
+    let fallbackIndex = 0;
+    
+    function tryNextFallback() {
+        if (fallbackIndex >= fallbackUrls.length) {
+            // All fallbacks failed, show error state
+            item.style.background = 'linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%)';
+            item.style.backgroundSize = '20px 20px';
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: absolute; 
+                top: 50%; 
+                left: 50%; 
+                transform: translate(-50%, -50%); 
+                color: #666; 
+                font-size: 14px; 
+                text-align: center;
+                padding: 20px;
+            `;
+            errorDiv.innerHTML = `
+                <div>⚠️</div>
+                <div>Image not available</div>
+                <div style="font-size: 12px; margin-top: 5px;">${image.title}</div>
+            `;
+            item.appendChild(errorDiv);
+            return;
+        }
+        
+        const fallbackUrl = fallbackUrls[fallbackIndex];
+        console.log(`Trying fallback ${fallbackIndex + 1}: ${fallbackUrl}`);
+        
+        const fallbackImg = new Image();
+        fallbackImg.onload = function() {
+            console.log(`Fallback ${fallbackIndex + 1} succeeded: ${fallbackUrl}`);
+            item.style.backgroundImage = `url(${fallbackUrl})`;
+            item.style.backgroundSize = 'cover';
+            item.style.backgroundPosition = 'center';
+            item.style.backgroundRepeat = 'no-repeat';
+        };
+        
+        fallbackImg.onerror = function() {
+            console.warn(`Fallback ${fallbackIndex + 1} failed: ${fallbackUrl}`);
+            fallbackIndex++;
+            tryNextFallback();
+        };
+        
+        fallbackImg.src = fallbackUrl;
+    }
+    
+    tryNextFallback();
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Category filter clicks
+    categoryFilters.addEventListener('click', (e) => {
+        if (e.target.classList.contains('filter-btn')) {
+            const category = e.target.dataset.category;
+            filterImages(category);
+        }
+    });
+
+    // Modal controls
+    if (modalClose) modalClose.onclick = closeModal;
+    if (nextBtn) nextBtn.onclick = () => navigateModal(1);
+    if (prevBtn) prevBtn.onclick = () => navigateModal(-1);
+    
+    // Close modal on outside click
+    if (modal) {
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (modal && modal.classList.contains('active')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeModal();
+                    break;
+                case 'ArrowLeft':
+                    navigateModal(-1);
+                    break;
+                case 'ArrowRight':
+                    navigateModal(1);
+                    break;
+            }
+        }
+    });
+}
+
+// Open modal with image - IMPROVED VERSION
+function openModal(imageIndex) {
+    if (!modal || !modalImage) return;
+    
+    currentImageIndex = imageIndex;
+    const image = filteredImages[imageIndex];
+    
+    console.log('Opening modal for image:', image);
+    console.log('Using fullUrl:', image.fullUrl);
+    
+    // Show loading state
+    modalImage.style.opacity = '0.5';
+    modalImage.alt = 'Loading...';
+    
+    // Create a new image to test loading
+    const testImg = new Image();
+    
+    testImg.onload = function() {
+        console.log('Modal image loaded successfully:', image.fullUrl);
+        modalImage.src = image.fullUrl;
+        modalImage.alt = image.title;
+        modalImage.style.opacity = '1';
+    };
+    
+    testImg.onerror = function() {
+        console.warn('Modal image failed to load, trying fallbacks:', image.fullUrl);
+        
+        // Try multiple fallback URLs for the modal
+        const modalFallbacks = [
+            image.url, // Use the thumbnail URL as fallback
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}`,
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.jpg`,
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.png`
+        ];
+        
+        tryModalImageFallbacks(modalFallbacks, image, 0);
+    };
+    
+    // Start loading the image
+    testImg.src = image.fullUrl;
+    
+    if (modalCategory) modalCategory.textContent = image.category;
+    
     updateImageCounter();
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
+// Try fallback URLs for modal images
+// Try fallback URLs for modal images
+function tryModalImageFallbacks(fallbackUrls, image, index) {
+    if (index >= fallbackUrls.length) {
+        console.error('All modal image fallbacks failed for:', image.id);
+        modalImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIE5vdCBBdmFpbGFibGU8L3RleHQ+PC9zdmc+';
+        modalImage.alt = 'Image not available';
+        modalImage.style.opacity = '1';
+        return;
+    }
+    
+    const fallbackUrl = fallbackUrls[index];
+    console.log(`Trying modal fallback ${index + 1}: ${fallbackUrl}`);
+    
+    const fallbackImg = new Image();
+    fallbackImg.onload = function() {
+        console.log(`Modal fallback ${index + 1} succeeded: ${fallbackUrl}`);
+        modalImage.src = fallbackUrl;
+        modalImage.alt = image.title;
+        modalImage.style.opacity = '1';
+    };
+    
+    fallbackImg.onerror = function() {
+        console.warn(`Modal fallback ${index + 1} failed: ${fallbackUrl}`);
+        tryModalImageFallbacks(fallbackUrls, image, index + 1);
+    };
+    
+    fallbackImg.src = fallbackUrl;
+}
+
+// Close modal
 function closeModal() {
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 }
 
-function nextImage() {
-    currentImageIndex = (currentImageIndex + 1) % allImages.length;
-    modalImage.src = allImages[currentImageIndex].fullUrl;
+// Navigate modal (previous/next image)
+function navigateModal(direction) {
+    if (filteredImages.length === 0) return;
+    
+    currentImageIndex += direction;
+    
+    // Wrap around
+    if (currentImageIndex >= filteredImages.length) {
+        currentImageIndex = 0;
+    } else if (currentImageIndex < 0) {
+        currentImageIndex = filteredImages.length - 1;
+    }
+    
+    const image = filteredImages[currentImageIndex];
+    
+    // Show loading state
+    modalImage.style.opacity = '0.5';
+    
+    // Load new image
+    const newImg = new Image();
+    newImg.onload = function() {
+        modalImage.src = image.fullUrl;
+        modalImage.alt = image.title;
+        modalImage.style.opacity = '1';
+    };
+    
+    newImg.onerror = function() {
+        console.warn('Navigation image failed to load, trying fallbacks:', image.fullUrl);
+        const modalFallbacks = [
+            image.url,
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}`,
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.jpg`,
+            `https://res.cloudinary.com/${cloudinaryConfig.cloudName}/image/upload/${image.id}.png`
+        ];
+        tryModalImageFallbacks(modalFallbacks, image, 0);
+    };
+    
+    newImg.src = image.fullUrl;
+    
+    if (modalCategory) modalCategory.textContent = image.category;
     updateImageCounter();
 }
 
-function prevImage() {
-    currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
-    modalImage.src = allImages[currentImageIndex].fullUrl;
-    updateImageCounter();
-}
-
+// Update image counter in modal
 function updateImageCounter() {
-    imageCounter.textContent = `${currentImageIndex + 1} / ${allImages.length}`;
+    if (imageCounter) {
+        imageCounter.textContent = `${currentImageIndex + 1} of ${filteredImages.length}`;
+    }
+    
+    // Update navigation button states
+    if (prevBtn) {
+        prevBtn.disabled = filteredImages.length <= 1;
+        prevBtn.style.opacity = filteredImages.length <= 1 ? '0.5' : '1';
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = filteredImages.length <= 1;
+        nextBtn.style.opacity = filteredImages.length <= 1 ? '0.5' : '1';
+    }
 }
 
-// Utility functions
+// Utility functions for showing/hiding loading and error states
 function showLoading() {
-    loadingSpinner.style.display = 'flex';
-    errorMessage.style.display = 'none';
-    galleryGrid.style.display = 'none';
+    if (loadingSpinner) loadingSpinner.style.display = 'flex';
+    if (galleryGrid) galleryGrid.style.display = 'none';
+    if (categoryFilters) categoryFilters.style.display = 'none';
+    if (errorMessage) errorMessage.style.display = 'none';
+    if (noResults) noResults.style.display = 'none';
 }
 
 function hideLoading() {
-    loadingSpinner.style.display = 'none';
-    galleryGrid.style.display = 'grid';
+    if (loadingSpinner) loadingSpinner.style.display = 'none';
 }
 
 function showError(message) {
-    loadingSpinner.style.display = 'none';
-    errorMessage.style.display = 'block';
-    errorMessage.querySelector('p').textContent = message;
+    if (loadingSpinner) loadingSpinner.style.display = 'none';
+    if (galleryGrid) galleryGrid.style.display = 'none';
+    if (categoryFilters) categoryFilters.style.display = 'none';
+    if (noResults) noResults.style.display = 'none';
+    
+    if (errorMessage) {
+        errorMessage.style.display = 'block';
+        if (errorText) {
+            errorText.textContent = message;
+        }
+    }
 }
 
-// Setup event listeners
-function setupEventListeners() {
-    // Modal controls
-    modalClose.addEventListener('click', closeModal);
-    nextBtn.addEventListener('click', nextImage);
-    prevBtn.addEventListener('click', prevImage);
+// Debug function to log gallery state
+function debugGalleryState() {
+    console.log('=== Gallery Debug Info ===');
+    console.log('Total images loaded:', allImages.length);
+    console.log('Filtered images:', filteredImages.length);
+    console.log('Current filter:', currentFilter);
+    console.log('Available categories:', Array.from(categories.keys()));
+    console.log('Cloudinary config:', cloudinaryConfig);
+    
+    if (allImages.length > 0) {
+        console.log('Sample image data:', allImages[0]);
+    }
+    
+    console.log('Modal state:', modal ? modal.classList.contains('active') : 'Modal not found');
+    console.log('==========================');
+}
 
-    // Modal background click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
+// Expose debug function globally for troubleshooting
+window.debugGallery = debugGalleryState;
 
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (!modal.classList.contains('active')) return;
+// Optional: Add a refresh function for manual reloading
+function refreshGallery() {
+    console.log('Refreshing gallery...');
+    allImages = [];
+    filteredImages = [];
+    categories.clear();
+    
+    if (galleryGrid) galleryGrid.innerHTML = '';
+    if (categoryFilters) categoryFilters.innerHTML = '';
+    
+    initializeGallery();
+}
 
-        switch(e.key) {
-            case 'Escape':
-                closeModal();
-                break;
-            case 'ArrowRight':
-                nextImage();
-                break;
-            case 'ArrowLeft':
-                prevImage();
-                break;
-        }
-    });
+// Expose refresh function globally
+window.refreshGallery = refreshGallery;
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+// Handle orientation change on mobile devices
+window.addEventListener('orientationchange', function() {
+    setTimeout(() => {
+        if (modal && modal.classList.contains('active')) {
+            // Recalculate modal image size after orientation change
+            const image = filteredImages[currentImageIndex];
+            if (image && modalImage) {
+                modalImage.style.maxHeight = '90vh';
+                modalImage.style.maxWidth = '90vw';
             }
-        });
-    });
-
-    // Navbar scroll effect
-    window.addEventListener('scroll', function() {
-        const navbar = document.getElementById('navbar');
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
         }
-    });
+    }, 100);
+});
+
+// Handle window resize
+window.addEventListener('resize', function() {
+    if (modal && modal.classList.contains('active')) {
+        // Ensure modal stays properly sized
+        const image = filteredImages[currentImageIndex];
+        if (image && modalImage) {
+            modalImage.style.maxHeight = '90vh';
+            modalImage.style.maxWidth = '90vw';
+        }
+    }
+});
+
+// Initialize touch gestures for mobile modal navigation
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleModalSwipe() {
+    const swipeThreshold = 50;
+    const swipeDistance = touchEndX - touchStartX;
+    
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            // Swipe right - go to previous image
+            navigateModal(-1);
+        } else {
+            // Swipe left - go to next image
+            navigateModal(1);
+        }
+    }
 }
-    </script>
-</body>
+
+// Add touch event listeners to modal
+if (modal) {
+    modal.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    modal.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleModalSwipe();
+    }, { passive: true });
+}
+
+// Preload adjacent images for better performance
+function preloadAdjacentImages() {
+    if (filteredImages.length <= 1) return;
+    
+    const nextIndex = (currentImageIndex + 1) % filteredImages.length;
+    const prevIndex = currentImageIndex === 0 ? filteredImages.length - 1 : currentImageIndex - 1;
+    
+    // Preload next image
+    if (filteredImages[nextIndex]) {
+        const nextImg = new Image();
+        nextImg.src = filteredImages[nextIndex].fullUrl;
+    }
+    
+    // Preload previous image
+    if (filteredImages[prevIndex]) {
+        const prevImg = new Image();
+        prevImg.src = filteredImages[prevIndex].fullUrl;
+    }
+}
+
+// Enhanced modal opening with preloading
+const originalOpenModal = openModal;
+openModal = function(imageIndex) {
+    originalOpenModal(imageIndex);
+    // Preload adjacent images after opening modal
+    setTimeout(preloadAdjacentImages, 500);
+};
+
+// Add error recovery for network issues
+let retryAttempts = 0;
+const maxRetryAttempts = 3;
+
+function retryGalleryLoad() {
+    if (retryAttempts < maxRetryAttempts) {
+        retryAttempts++;
+        console.log(`Retrying gallery load (attempt ${retryAttempts}/${maxRetryAttempts})`);
+        
+        setTimeout(() => {
+            refreshGallery();
+        }, 2000 * retryAttempts); // Exponential backoff
+    } else {
+        console.error('Maximum retry attempts reached. Gallery load failed.');
+        showError('Failed to load gallery after multiple attempts. Please check your internet connection and try refreshing the page.');
+    }
+}
+
+// Enhanced error handling for initial load
+const originalInitializeGallery = initializeGallery;
+initializeGallery = async function() {
+    try {
+        await originalInitializeGallery();
+        retryAttempts = 0; // Reset retry counter on success
+    } catch (error) {
+        console.error('Gallery initialization failed:', error);
+        retryGalleryLoad();
+    }
+};
+
+console.log('Gallery script loaded successfully. Use debugGallery() or refreshGallery() for troubleshooting.');
+  </script>
+ </body>
 </html>

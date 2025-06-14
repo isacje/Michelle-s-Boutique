@@ -746,3 +746,40 @@
     font-size: 14px;
     font-style: italic;
 }
+
+.gallery-preview-box {
+    background:var(--dark-gold);
+    /* border: 2px dashed #ccc; */
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 12px;
+    margin-top: 2rem;
+}
+
+.gallery-preview-box p {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.gallery-cta-btn {
+    display: inline-block;
+    background-color: #222;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.gallery-cta-btn:hover {
+    background-color: #555;
+}
+
+.gallery-note {
+    text-align: center;
+    margin-top: 1rem;
+    font-style: italic;
+    color: #666;
+}
